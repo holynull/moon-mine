@@ -24,6 +24,10 @@ contract MoonMine is Ownable {
         address _tokenOwner,
         address _owner
     ) {
+        require(_proxy != address(0), "PROXY_MUST_NOT_BE_0");
+        require(_token != address(0), "TOKEN_MUST_NOT_BE_0");
+        require(_tokenOwner != address(0), "TOKEN_OWNER_MUST_NOT_BE_0");
+        require(_owner != address(0), "OWNER_MUST_NOT_BE_0");
         proxy = _proxy;
         token = _token;
         tokenOwner = _tokenOwner;
@@ -31,11 +35,13 @@ contract MoonMine is Ownable {
     }
 
     function setProxy(address _proxy) public onlyOwner {
+        require(_proxy != address(0), "PROXY_MUST_NOT_BE_0");
         proxy = _proxy;
         emit SetProxy(_proxy);
     }
 
     function claim(address _who, uint256 _balance) public {
+        require(_who != address(0), "USER_MUST_NOT_BE_0");
         require(msg.sender == proxy, "PROXY_ONLY");
         uint256 toClaim = _balance.sub(claimed[_who]);
         require(toClaim > 0, "NOTHING_TO_CLAIM");
@@ -51,12 +57,14 @@ contract MoonMine is Ownable {
     {
         require(who.length == _balances.length, "DATA_NOT_MATCH");
         for (uint256 i = 0; i < _balances.length; i++) {
+            require(who[i] != address(0), "USER_ADDRESS_MUST_NOT_BE_0");
             claimed[who[i]] = _balances[i];
             emit Value(who[i], _balances[i]);
         }
     }
 
     function setToken(address _token) external onlyOwner {
+        require(_token != address(0), "TOKEN_MUST_NOT_BE_0");
         token = _token;
         emit SetToken(_token);
     }
